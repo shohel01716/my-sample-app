@@ -57,6 +57,7 @@ class SignUpSelfieState extends State<SignUpSelfie> {
 
   @override
   void dispose() {
+    timer!.cancel();
     _cameraService.dispose();
     super.dispose();
   }
@@ -115,6 +116,7 @@ class SignUpSelfieState extends State<SignUpSelfie> {
               faceDetected = _faceDetectorService.faces[0];
             });
             if (_saving) {
+              timer!.cancel();
 
               if(widget.isSignup) {
                 debugPrint("====_saving=====" + _saving.toString());
@@ -167,7 +169,14 @@ class SignUpSelfieState extends State<SignUpSelfie> {
         }
       }
     });
+
+    timer = Timer(Duration(seconds: 2), (){
+      debugPrint("=========onShot=========");
+      onShot();
+    });
   }
+
+  Timer? timer;
 
   _onBackPressed() {
     Navigator.of(context).pop();
